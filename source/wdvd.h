@@ -1,11 +1,13 @@
 #ifndef _WDVD_H_
 #define _WDVD_H_
 
+#include <asndlib.h>
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+
 /* Prototypes */
 s32 WDVD_Init(void);
 s32 WDVD_Close(void);

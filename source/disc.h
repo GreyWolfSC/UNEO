@@ -1,11 +1,12 @@
 #ifndef _DISC_H_
 #define _DISC_H_
 
+#include <asndlib.h>
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
 /* Disc header structure */
 struct discHdr
 {
@@ -46,12 +47,11 @@ s32  Disc_Wait(void);
 s32  Disc_SetUSB(u8 *);
 s32  Disc_ReadHeader(void *);
 s32  Disc_IsWii(void);
-s32  Disc_BootPartition(u64);
-s32  Disc_WiiBoot(void);
+s32  Disc_BootPartition(u64, u32, u8);
+s32  Disc_WiiBoot(u32, u8);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

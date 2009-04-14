@@ -2,11 +2,6 @@
 #include <string.h>
 #include <ogcsys.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include "partition.h"
 #include "usbstorage.h"
 #include "utils.h"
@@ -54,6 +49,3 @@ s32 Partition_GetEntries(partitionEntry *outbuf, u32 *outval)
 
 	return 0;
 }
-#ifdef __cplusplus
-}
-#endif

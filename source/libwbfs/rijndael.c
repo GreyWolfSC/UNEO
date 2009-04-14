@@ -8,10 +8,6 @@
    algorithm place on its exploitation.  
 
 */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -400,6 +396,3 @@ void aes_encrypt(u8 *iv, u8 *inbuf, u8 *outbuf, unsigned long long len) {
   }
 }
       
-#ifdef __cplusplus
-{
-#endif

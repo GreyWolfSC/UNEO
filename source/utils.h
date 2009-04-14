@@ -1,11 +1,6 @@
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 /* Constants */
 #define KB_SIZE		1024.0
 #define MB_SIZE		1048576.0
@@ -16,9 +11,5 @@ extern "C"
 
 /* Prototypes */
 u32 swap32(u32);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

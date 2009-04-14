@@ -1,6 +1,8 @@
 #ifndef _PARTITION_H_
 #define _PARTITION_H_
 
+#include <asndlib.h>
+
 #ifdef __cplusplus
 extern "C"
 {

@@ -2,27 +2,20 @@
 #include <malloc.h>
 #include <ogcsys.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include "usbstorage.h"
 #include "utils.h"
 #include "video.h"
 #include "wdvd.h"
-
 
 #include "libwbfs/libwbfs.h"
 
 /* Constants */
 #define MAX_NB_SECTORS	32
 
-
 /* Variables */
-static wbfs_t *hdd = NULL;
-static u32 nb_sectors, sector_size;
 
+static u32 nb_sectors, sector_size;
+static wbfs_t *hdd = NULL;
 
 void __WBFS_Spinner(s32 x, s32 max)
 {
@@ -59,7 +52,7 @@ void __WBFS_Spinner(s32 x, s32 max)
 	percent = (x * 100.0) / max;
 	size    = (hdd->wbfs_sec_sz / GB_SIZE) * max;
 
-	Con_ClearLine();
+    //Con_ClearLine();
 
 	/* Show progress */
 	if (x != max) {
@@ -67,6 +60,11 @@ void __WBFS_Spinner(s32 x, s32 max)
 		fflush(stdout);
 	} else
 		printf("    %.2fGB copied in %d:%02d:%02d\n", size, h, m, s);
+}
+
+wbfs_t *GetHddInfo(void)
+{
+    return hdd;
 }
 
 s32 __WBFS_ReadDVD(void *fp, u32 lba, u32 len, void *iobuf)
@@ -198,6 +196,16 @@ s32 WBFS_Open(void)
 	hdd = wbfs_open_hd(__WBFS_ReadUSB, __WBFS_WriteUSB, NULL, sector_size, nb_sectors, 0);
 	if (!hdd)
 		return -1;
+
+	return 0;
+}
+
+s32 WBFS_Close(void)
+
+{
+	/* Close hard disk */
+	if (hdd)
+		wbfs_close(hdd);
 
 	return 0;
 }
@@ -346,8 +354,3 @@ s32 WBFS_DiskSpace(f32 *used, f32 *free)
 
 	return 0;
 }
-
-#ifdef __cplusplus
-}
-#endif
-

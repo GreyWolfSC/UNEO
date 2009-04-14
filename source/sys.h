@@ -1,11 +1,11 @@
 #ifndef _SYS_H_
 #define _SYS_H_
+#include <asndlib.h>
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
 /* Prototypes */
 void Sys_Init(void);
 void Sys_Reboot(void);

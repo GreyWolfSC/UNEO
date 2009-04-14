@@ -3,10 +3,6 @@
 #include <malloc.h>
 #include <ogcsys.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 /* Constants */
 #define IOCTL_DI_READID		0x70
 #define IOCTL_DI_READ		0x71
@@ -23,14 +19,12 @@ extern "C"
 #define IOCTL_DI_SETUSBMODE	0xF4
 #define IOCTL_DI_DISABLERESET	0xF6
 
-
 /* Variables */
 static u32 inbuf[8]  ATTRIBUTE_ALIGN(32);
 static u32 outbuf[8] ATTRIBUTE_ALIGN(32);
 
 static const char di_fs[] ATTRIBUTE_ALIGN(32) = "/dev/di";
 static s32 di_fd = -1;
-
 
 
 s32 WDVD_Init(void)
@@ -337,6 +331,3 @@ s32 WDVD_SetUSBMode(u8 *id)
 
 	return (ret == 1) ? 0 : -ret;
 }
-#ifdef __cplusplus
-}
-#endif

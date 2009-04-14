@@ -1,16 +1,12 @@
 #include <stdio.h>
 #include <ogcsys.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include "sys.h"
 #include "wpad.h"
 
 /* Constants */
 #define MAX_WIIMOTES	4
+
 
 void __Wpad_PowerCallback(s32 chan)
 {
@@ -72,7 +68,3 @@ u32 Wpad_WaitButtons(void)
 
 	return buttons;
 }
-
-#ifdef __cplusplus
-}
-#endif

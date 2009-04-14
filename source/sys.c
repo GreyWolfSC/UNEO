@@ -1,11 +1,6 @@
 #include <stdio.h>
 #include <ogcsys.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include "sys.h"
 
 /* Constants */
@@ -13,6 +8,7 @@ extern "C"
 
 /* Variables */
 static const char certs_fs[] ATTRIBUTE_ALIGN(32) = "/sys/cert.sys";
+
 
 void __Sys_ResetCallback(void)
 {
@@ -30,7 +26,7 @@ void __Sys_PowerCallback(void)
 void Sys_Init(void)
 {
 	/* Initialize video subsytem */
-	//VIDEO_Init();
+	VIDEO_Init();
 
 	/* Set RESET/POWER button callback */
 	SYS_SetResetCallback(__Sys_ResetCallback);
@@ -93,7 +89,3 @@ s32 Sys_GetCerts(signed_blob **certs, u32 *len)
 
 	return ret;
 }
-
-#ifdef __cplusplus
-}
-#endif

@@ -3,11 +3,6 @@
 // Licensed under the terms of the GNU GPL, version 2
 // http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include "wiidisc.h"
 
 void aes_set_key(u8 *key);
@@ -339,9 +334,4 @@ void wd_fix_partition_table(wiidisc_t *d, partition_selector_t selector, u8* par
         b32 = (u32*)(partition_table);
         *b32 = wbfs_htonl(j);
 }
-
-
-#ifdef __cplusplus
-}
-#endif
 

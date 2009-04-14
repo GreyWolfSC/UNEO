@@ -1,8 +1,10 @@
 /****************************************************************************
  * libwiigui
+ *
  * Tantric 2009
  *
  * gui_optionbrowser.cpp
+ *
  * GUI class definitions
  ***************************************************************************/
 
@@ -75,7 +77,7 @@ GuiOptionBrowser::GuiOptionBrowser(int w, int h, OptionList * l)
 
 	for(int i=0; i<PAGESIZE; i++)
 	{
-		optionTxt[i] = new GuiText(options->name[i], 20, (GXColor){0, 0, 0, 0xff});
+		optionTxt[i] = new GuiText(options->name[i], 16, (GXColor){0, 0, 0, 0xff});
 		optionTxt[i]->SetAlignment(ALIGN_LEFT, ALIGN_MIDDLE);
 		optionTxt[i]->SetPosition(8,0);
 
@@ -177,6 +179,20 @@ int GuiOptionBrowser::GetClickedOption()
 	return found;
 }
 
+int GuiOptionBrowser::GetSelectedOption()
+{
+	int found = -1;
+	for(int i=0; i<PAGESIZE; i++)
+	{
+		if(optionBtn[i]->GetState() == STATE_SELECTED)
+		{
+			optionBtn[i]->SetState(STATE_SELECTED);
+			found = optionIndex[i];
+			break;
+		}
+	}
+	return found;
+}
 /****************************************************************************
  * FindMenuItem
  *

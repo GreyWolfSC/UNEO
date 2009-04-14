@@ -1,15 +1,12 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-
-//#ifndef LIBWBFS_H
-//#define LIBWBFS_H
+#ifndef LIBWBFS_H
+#define LIBWBFS_H
 
 #include "libwbfs_os.h" // this file is provided by the project wanting to compile libwbfs
 #include "wiidisc.h"
 
+#ifdef __cplusplus
+   extern "C" {
+#endif /* __cplusplus */
 
 typedef u32 be32_t;
 typedef u16 be16_t;
@@ -213,9 +210,7 @@ u32 wbfs_extract_file(wbfs_disc_t*d, char *path);
 void wbfs_set_force_mode(int force);
 
 #ifdef __cplusplus
-}
+   }
+#endif /* __cplusplus */
+
 #endif
-
-
-
-

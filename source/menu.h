@@ -1,23 +1,28 @@
+/****************************************************************************
+ * libwiigui Template
+ * Tantric 2009
+ *
+ * menu.h
+ * Menu flow routines - handles all menu logic
+ ***************************************************************************/
+
 #ifndef _MENU_H_
 #define _MENU_H_
 
-#ifdef __cplusplus
-extern "C"
+#include <ogcsys.h>
+
+void InitGUIThreads();
+int MainMenu (int menuitem);
+
+enum
 {
-#endif
-
-/* Prototypes */
-void Menu_Format(void);
-void Menu_Install(void);
-void Menu_Remove(void);
-void Menu_Boot(void);
-
-void Menu_Loop(void);
-//__Menu_ShowGameImage();
-
-#ifdef __cplusplus
-}
-#endif
+	MENU_EXIT = -1,
+	MENU_NONE,
+	MENU_SETTINGS,
+	MENU_DISCLIST,
+	MENU_FORMAT,
+	MENU_INSTALL,
+	MENU_CHECK
+};
 
 #endif
-

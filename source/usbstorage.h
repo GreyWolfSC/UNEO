@@ -1,11 +1,12 @@
 #ifndef _USBSTORAGE_H_
-#define _USBSTORAGE_H_ 
+#define _USBSTORAGE_H_
+
+#include <asndlib.h>
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
 /* Prototypes */
 s32  USBStorage_GetCapacity(u32 *);
 s32  USBStorage_Init(void);

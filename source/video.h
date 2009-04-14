@@ -1,28 +1,24 @@
+/****************************************************************************
+ * libwiigui Template
+ * Tantric 2009
+ *
+ * video.h
+ * Video routines
+ ***************************************************************************/
+
 #ifndef _VIDEO_H_
 #define _VIDEO_H_
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#include <ogcsys.h>
 
-#include "libpng/pngu/pngu.h"
+void InitVideo ();
+void StopGX();
+void ResetVideo_Menu();
+void Menu_Render();
+void Menu_DrawImg(f32 xpos, f32 ypos, u16 width, u16 height, u8 data[], f32 degrees, f32 scaleX, f32 scaleY, u8 alphaF );
+void Menu_DrawRectangle(f32 x, f32 y, f32 width, f32 height, GXColor color, u8 filled);
 
-/* Prototypes */
-void Con_Init(u32, u32, u32, u32);
-void Con_Clear(void);
-void Con_ClearLine(void);
-void Con_FgColor(u32, u8);
-void Con_BgColor(u32, u8);
-void Con_FillRow(u32, u32, u8);
-
-void Video_Configure(GXRModeObj *);
-void Video_SetMode(void);
-void Video_Clear(s32);
-void Video_DrawPng(IMGCTX, PNGUPROP, u16, u16);
-
-#ifdef __cplusplus
-}
-#endif
+extern int screenheight;
+extern int screenwidth;
 
 #endif

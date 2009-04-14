@@ -30,12 +30,6 @@ distribution.
 #include <malloc.h>
 #include <stdio.h>
 #include <string.h>
-//#include "libwiigui/gui.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
 /* Constants */
 #define UMS_BASE			(('U'<<24)|('M'<<16)|('S'<<8))
@@ -48,12 +42,12 @@ extern "C"
 
 #define UMS_HEAPSIZE			0x10000
 
-
 /* Variables */
 static char fs[] ATTRIBUTE_ALIGN(32) = "/dev/usb/ehc";
  
 static s32 hid = -1, fd = -1;
 static u32 sector_size;
+
 
 inline s32 __USBStorage_isMEM2Buffer(const void *buffer)
 {
@@ -181,7 +175,3 @@ s32 USBStorage_WriteSectors(u32 sector, u32 numSectors, const void *buffer)
 
 	return IPC_ENOENT;
 }
-
-#ifdef __cplusplus
-}
-#endif
