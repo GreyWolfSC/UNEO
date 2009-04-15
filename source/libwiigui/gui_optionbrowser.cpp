@@ -26,6 +26,12 @@ GuiOptionBrowser::GuiOptionBrowser(int w, int h, OptionList * l)
 	trigA = new GuiTrigger;
 	trigA->SetSimpleTrigger(-1, WPAD_BUTTON_A | WPAD_CLASSIC_BUTTON_A, PAD_BUTTON_A);
 
+	trigHeldA = new GuiTrigger;
+    trigHeldA->SetHeldTrigger(-1, WPAD_BUTTON_A | WPAD_CLASSIC_BUTTON_A, PAD_BUTTON_A);
+
+	btnSoundOver = new GuiSound(button_over_pcm, button_over_pcm_size, SOUND_PCM);
+	btnSoundClick = new GuiSound(button_click_pcm, button_click_pcm_size, SOUND_PCM);
+
 	bgOptions = new GuiImageData(bg_options_png);
 	bgOptionsImg = new GuiImage(bgOptions);
 	bgOptionsImg->SetParent(this);
@@ -57,31 +63,45 @@ GuiOptionBrowser::GuiOptionBrowser(int w, int h, OptionList * l)
 	arrowUpBtn->SetImage(arrowUpImg);
 	arrowUpBtn->SetImageOver(arrowUpOverImg);
 	arrowUpBtn->SetAlignment(ALIGN_RIGHT, ALIGN_TOP);
-	arrowUpBtn->SetSelectable(false);
-	arrowUpBtn->SetTrigger(trigA);
+    arrowUpBtn->SetSelectable(false);
+    arrowUpBtn->SetClickable(false);
+    arrowUpBtn->SetHoldable(true);
+	arrowUpBtn->SetTrigger(trigHeldA);
+	arrowUpBtn->SetSoundOver(btnSoundOver);
+	arrowUpBtn->SetSoundClick(btnSoundClick);
 
 	arrowDownBtn = new GuiButton(arrowDownImg->GetWidth(), arrowDownImg->GetHeight());
 	arrowDownBtn->SetParent(this);
 	arrowDownBtn->SetImage(arrowDownImg);
 	arrowDownBtn->SetImageOver(arrowDownOverImg);
 	arrowDownBtn->SetAlignment(ALIGN_RIGHT, ALIGN_BOTTOM);
-	arrowDownBtn->SetSelectable(false);
-	arrowDownBtn->SetTrigger(trigA);
+	arrowUpBtn->SetSelectable(false);
+	arrowUpBtn->SetClickable(false);
+	arrowUpBtn->SetHoldable(true);
+	arrowDownBtn->SetTrigger(trigHeldA);
+	arrowDownBtn->SetSoundOver(btnSoundOver);
+	arrowDownBtn->SetSoundClick(btnSoundClick);
 
 	scrollbarBoxBtn = new GuiButton(scrollbarBoxImg->GetWidth(), scrollbarBoxImg->GetHeight());
 	scrollbarBoxBtn->SetParent(this);
 	scrollbarBoxBtn->SetImage(scrollbarBoxImg);
 	scrollbarBoxBtn->SetImageOver(scrollbarBoxOverImg);
 	scrollbarBoxBtn->SetAlignment(ALIGN_RIGHT, ALIGN_TOP);
+	scrollbarBoxBtn->SetMinY(0);
+    scrollbarBoxBtn->SetMaxY(304);
+	scrollbarBoxBtn->SetClickable(false);
 	scrollbarBoxBtn->SetSelectable(false);
+	scrollbarBoxBtn->SetHoldable(true);
 
 	for(int i=0; i<PAGESIZE; i++)
 	{
-		optionTxt[i] = new GuiText(options->name[i], 16, (GXColor){0, 0, 0, 0xff});
+		//optionTxt[i] = new GuiText(options->name[i], 18, (GXColor){0, 156, 255, 0xff});
+		optionTxt[i] = new GuiText(options->name[i], 18, (GXColor){0, 0, 0, 0xff});
 		optionTxt[i]->SetAlignment(ALIGN_LEFT, ALIGN_MIDDLE);
 		optionTxt[i]->SetPosition(8,0);
 
-		optionVal[i] = new GuiText(NULL, 20, (GXColor){0, 0, 0, 0xff});
+		//optionVal[i] = new GuiText(NULL, 18, (GXColor){0, 156, 255, 0xff});
+		optionVal[i] = new GuiText(NULL, 18, (GXColor){0, 0,0, 0xff});
 		optionVal[i]->SetAlignment(ALIGN_LEFT, ALIGN_MIDDLE);
 		optionVal[i]->SetPosition(250,0);
 
@@ -94,6 +114,7 @@ GuiOptionBrowser::GuiOptionBrowser(int w, int h, OptionList * l)
 		optionBtn[i]->SetImageOver(optionBg[i]);
 		optionBtn[i]->SetPosition(0,30*i+3);
 		optionBtn[i]->SetTrigger(trigA);
+		optionBtn[i]->SetSoundClick(btnSoundClick);
 	}
 }
 
@@ -126,6 +147,8 @@ GuiOptionBrowser::~GuiOptionBrowser()
 	delete scrollbarBoxOver;
 
 	delete trigA;
+	delete btnSoundOver;
+	delete btnSoundClick;
 
 	for(int i=0; i<PAGESIZE; i++)
 	{
@@ -156,7 +179,10 @@ void GuiOptionBrowser::SetFocus(int f)
 void GuiOptionBrowser::ResetState()
 {
 	if(state != STATE_DISABLED)
+	{
 		state = STATE_DEFAULT;
+		stateChan = -1;
+	}
 
 	for(int i=0; i<PAGESIZE; i++)
 	{
@@ -193,6 +219,7 @@ int GuiOptionBrowser::GetSelectedOption()
 	}
 	return found;
 }
+
 /****************************************************************************
  * FindMenuItem
  *
@@ -264,6 +291,20 @@ void GuiOptionBrowser::Update(GuiTrigger * t)
 
 	next = listOffset;
 
+if(arrowDownBtn->GetState() == STATE_HELD && arrowDownBtn->GetStateChan() == t->chan)
+        {
+                t->wpad.btns_h |= WPAD_BUTTON_DOWN;
+                if(!this->IsFocused())
+                        ((GuiWindow *)this->GetParent())->ChangeFocus(this);
+        }
+        else if(arrowUpBtn->GetState() == STATE_HELD && arrowUpBtn->GetStateChan() == t->chan)
+        {
+                t->wpad.btns_h |= WPAD_BUTTON_UP;
+                if(!this->IsFocused())
+                        ((GuiWindow *)this->GetParent())->ChangeFocus(this);
+        }
+		
+		
 	for(int i=0; i<PAGESIZE; i++)
 	{
 		if(next >= 0)
@@ -290,7 +331,7 @@ void GuiOptionBrowser::Update(GuiTrigger * t)
 			if(i != selectedItem && optionBtn[i]->GetState() == STATE_SELECTED)
 				optionBtn[i]->ResetState();
 			else if(i == selectedItem && optionBtn[i]->GetState() == STATE_DEFAULT)
-				optionBtn[selectedItem]->SetState(STATE_SELECTED);
+				optionBtn[selectedItem]->SetState(STATE_SELECTED, t->chan);
 		}
 
 		optionBtn[i]->Update(t);
@@ -319,7 +360,7 @@ void GuiOptionBrowser::Update(GuiTrigger * t)
 			else if(optionBtn[selectedItem+1]->IsVisible())
 			{
 				optionBtn[selectedItem]->ResetState();
-				optionBtn[selectedItem+1]->SetState(STATE_SELECTED);
+				optionBtn[selectedItem+1]->SetState(STATE_SELECTED, t->chan);
 				selectedItem++;
 			}
 		}
@@ -339,7 +380,7 @@ void GuiOptionBrowser::Update(GuiTrigger * t)
 			else
 			{
 				optionBtn[selectedItem]->ResetState();
-				optionBtn[selectedItem-1]->SetState(STATE_SELECTED);
+				optionBtn[selectedItem-1]->SetState(STATE_SELECTED, t->chan);
 				selectedItem--;
 			}
 		}

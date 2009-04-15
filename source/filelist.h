@@ -44,6 +44,12 @@ extern const u32	button_over_pcm_size;
 extern const u8     background_png[];
 extern const u32    background_png_size;
 
+extern const u8		logo_png[];
+extern const u32	logo_png_size;
+
+extern const u8		logo_over_png[];
+extern const u32	logo_over_png_size;
+
 extern const u8		button_png[];
 extern const u32	button_png_size;
 
@@ -55,6 +61,9 @@ extern const u32	button_large_png_size;
 
 extern const u8		button_large_over_png[];
 extern const u32	button_large_over_png_size;
+
+extern const u8		credits_box_png[];
+extern const u32	credits_box_png_size;
 
 extern const u8		wiimote_poweroff_png[];
 extern const u32	wiimote_poweroff_png_size;
