@@ -91,7 +91,8 @@ DefaultSettings()
 	Settings.tooltips = TooltipsOn;
 	snprintf(Settings.unlockCode, sizeof(Settings.unlockCode), "ab121b");
 	Settings.parentalcontrol = 0;
-	
+	Settings.cios = ios249;
+
 	CFG_LoadGlobal();
 }
 
@@ -99,10 +100,30 @@ DefaultSettings()
 int
 main(int argc, char *argv[])
 {
-//  __Disc_SetLowMem();
+
 	s32 ret2;
-	/* Load Custom IOS */
-	ret2 = IOS_ReloadIOS(249);
+
+    __io_wiisd.startup();
+	fatMountSimple("SD", &__io_wiisd);
+
+	CFG_Load(argc, argv);
+
+	DefaultSettings();
+
+	fatUnmount("SD");
+    __io_wiisd.shutdown();
+
+    /* Load Custom IOS */
+    if(Settings.cios == ios222) {
+        ret2 = IOS_ReloadIOS(222);
+        if (ret2 < 0) {
+            Settings.cios = ios249;
+            ret2 = IOS_ReloadIOS(249);
+        }
+	} else {
+	    ret2 = IOS_ReloadIOS(249);
+	}
+
 	if (ret2 < 0) {
 		printf("ERROR: cIOS could not be loaded!");
 		SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
@@ -113,37 +134,13 @@ main(int argc, char *argv[])
 	//Con_Init(CONSOLE_XCOORD, CONSOLE_YCOORD, CONSOLE_WIDTH, CONSOLE_HEIGHT);
 	//Wpad_Init();
 
-	__io_wiisd.startup();
-	fatMountSimple("SD", &__io_wiisd);
-	
-	//load config file
-	CFG_Load(argc, argv);
-	
-	DefaultSettings();
-
-	//Init Network
-/*	char myIP[16];
-	if( !Net_Init(myIP) ){
-		printf("Net_Init error");
-		sleep(1);
-		netcheck = false;
-	}
-	else netcheck = true;*/
-
-        PAD_Init();
+    PAD_Init();
 	InitVideo(); // Initialise video
 	InitAudio(); // Initialize audio
 
-	// read wiimote accelerometer and IR data
-	//WPAD_SetDataFormat(WPAD_CHAN_ALL,WPAD_FMT_BTNS_ACC_IR);
-	//WPAD_SetVRes(WPAD_CHAN_ALL, screenwidth, screenheight);
 
-	// Initialize font system
 	fontSystem = new FreeTypeGX();
-	if(CFG.widescreen)
-		fontSystem->loadFont(wfont_ttf, wfont_ttf_size, 0);
-	else
-		fontSystem->loadFont(font_ttf, font_ttf_size, 0);
+	fontSystem->loadFont(font_ttf, font_ttf_size, 0);
 	fontSystem->setCompatibilityMode(FTGX_COMPATIBILITY_DEFAULT_TEVOP_GX_PASSCLR | FTGX_COMPATIBILITY_DEFAULT_VTXDESC_GX_NONE);
 
 	InitGUIThreads();

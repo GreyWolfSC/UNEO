@@ -175,12 +175,9 @@ void cfg_int(char *name, short *var, int count)
 
 //static char bg_path[100];
 
-void CFG_Default(int widescreen)
+void CFG_Default()
 {
-	if(widescreen == -1)
-		CFG.widescreen = CONF_GetAspectRatio() == CONF_ASPECT_16_9 ? 2 : 0;//1=manual setting / 2=automatic
-	else
-		CFG.widescreen = widescreen;
+	CFG.widescreen = CONF_GetAspectRatio();
 
 	if (CFG.widescreen) {
 		snprintf(CFG.theme_path, sizeof(CFG.theme_path), "SD:/wtheme/");
@@ -211,7 +208,7 @@ void CFG_Default(int widescreen)
 	THEME.selection_y = 40;
 	THEME.selection_w = 396;
 	THEME.selection_h = 280;
-	THEME.cover_x = CFG.widescreen ? 26+22 : 26;
+	THEME.cover_x = 26;
 	THEME.cover_y = 55;
 	THEME.showID = 1;
 	THEME.id_x = 68;
@@ -222,12 +219,12 @@ void CFG_Default(int widescreen)
 	THEME.power_y = 355;
 	THEME.home_x = 485;//215;
 	THEME.home_y = 367;
-	THEME.setting_x = CFG.widescreen ? 60+35 : 60;//-210
+	THEME.setting_x = 60;//-210
 	THEME.setting_y = 367;
 	THEME.showHDD = -1; //default, non-force mode
 	THEME.showGameCnt = -1; //default, non-force mode
 	THEME.showToolTip = 1; //1 means use settings, 0 means force turn off
-	THEME.install_x = CFG.widescreen ? 16+12 : 16;//-280
+	THEME.install_x = 16;//-280
 	THEME.install_y = 355;
 	THEME.showBattery = 1;
 	THEME.showRegion = 1;
@@ -251,9 +248,9 @@ void CFG_Default(int widescreen)
 	THEME.clock_x = 0;
 	THEME.clock_y = -120;
 	THEME.clockAlign = CFG_ALIGN_CENTRE;
-	THEME.sdcard_x =  170;
+	THEME.sdcard_x = 160;
 	THEME.sdcard_y = 390;
-	
+
 }
 
 
@@ -356,9 +353,18 @@ void widescreen_set(char *name, char *val)
 	cfg_name = name;
 	cfg_val = val;
 
-	short widescreen;
-	if (cfg_bool("widescreen", &widescreen) && CFG.widescreen != widescreen)
-		CFG_Default(widescreen); //reset default when forced an other Screenmode
+	if (cfg_bool("widescreen", &CFG.widescreen)) //reset default
+	{
+		if (CFG.widescreen) {
+//			snprintf(CFG.covers_path, sizeof(CFG.covers_path), "SD:/wimages/");
+			snprintf(CFG.theme_path, sizeof(CFG.theme_path), "SD:/wtheme/");
+		}
+		else
+		{
+//			snprintf(CFG.covers_path, sizeof(CFG.covers_path), "SD:/images/");
+			snprintf(CFG.theme_path, sizeof(CFG.theme_path), "SD:/theme/");
+		}
+	}
 }
 
 
@@ -555,7 +561,7 @@ void theme_set(char *name, char *val)
 			THEME.clock_y = y;
 		}
 	}
-	
+
 	else if (strcmp(cfg_name, "sdcard_coords") == 0) {
 		short x,y;
 		if (sscanf(val, "%hd,%hd", &x, &y) == 2) {
@@ -677,6 +683,13 @@ void global_cfg_set(char *name, char *val)
 		if (sscanf(val, "%d", &i) == 1) {
 			Settings.parentalcontrol = i;
 		}
+		return;
+	}
+	else if (strcmp(name, "cios") == 0) {
+		int i;
+		if (sscanf(val, "%d", &i) == 1) {
+            Settings.cios = i;
+			}
 		return;
 	}
 }
@@ -843,7 +856,7 @@ bool cfg_save_global()
 	fprintf(f, "volume = %d\n ", Settings.volume);
 	fprintf(f, "tooltips = %d\n ", Settings.tooltips);
 	fprintf(f, "password = %s\n ", Settings.unlockCode);
-	fprintf(f, "parentalcontrol = %d\n ", Settings.parentalcontrol);
+	fprintf(f, "cios = %d\n ", Settings.cios);
 	fclose(f);
 	return true;
 }
@@ -1010,7 +1023,7 @@ void CFG_Load(int argc, char **argv)
 	//set app path
 //	chdir_app(argv[0]);
 
-	CFG_Default(-1); // -1 = no forced Screen-Mode (set widescreen from Wii-Settings)
+	CFG_Default();
 
 	snprintf(pathname, sizeof(pathname), "SD:/config/config.txt");
 

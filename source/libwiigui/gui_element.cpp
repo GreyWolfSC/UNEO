@@ -395,16 +395,13 @@ void GuiElement::SetEffect(int eff, int amount, int target)
 		else if(eff & EFFECT_SLIDE_RIGHT)
 			xoffsetDyn = screenwidth;
 	}
-	if(!(effects & EFFECT_FADE))
+	if(eff & EFFECT_FADE && amount > 0)
 	{
-		if(eff & EFFECT_FADE && amount > 0)
-		{
-			alphaDyn = 0;
-		}
-		else if(eff & EFFECT_FADE && amount < 0)
-		{
-			alphaDyn = alpha;
-		}
+		alphaDyn = 0;
+	}
+	else if(eff & EFFECT_FADE && amount < 0)
+	{
+		alphaDyn = alpha;
 	}
 
 	effects |= eff;

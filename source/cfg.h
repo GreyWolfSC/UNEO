@@ -142,7 +142,7 @@ struct Game_CFG
 };
 
 
-void CFG_Default(int widescreen);
+void CFG_Default();
 void CFG_Load(int argc, char **argv);
 struct Game_CFG* CFG_get_game_opt(u8 *id);
 bool CFG_save_game_opt(u8 *id);
@@ -190,6 +190,11 @@ enum {
 };
 
 enum {
+	ios249,
+	ios222,
+};
+
+enum {
 	HDDInfo,
 	Clock,
 };
@@ -231,13 +236,13 @@ struct SSettings {
     int     ocarina;
     int     vpatch;
 	int		sinfo;
-	int		ios;
 	int		hddinfo;
 	int		rumble;
 	int		volume;
 	int     tooltips;
 	char 	unlockCode[20];
 	int		parentalcontrol;
+	int     cios;
 };
 
 void CFG_LoadGlobal(void);
