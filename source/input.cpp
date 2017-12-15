@@ -15,7 +15,6 @@
 #include <ogcsys.h>
 #include <unistd.h>
 #include <wiiuse/wpad.h>
-#include <wupc/wupc.h>
 
 #include "menu.h"
 #include "video.h"
@@ -35,7 +34,6 @@ static int rumbleCount[4] = { 0, 0, 0, 0 };
  ***************************************************************************/
 void UpdatePads()
 {
-	WUPC_UpdateButtonStats();
 	WPAD_ScanPads();
 	PAD_ScanPads();
 	
@@ -52,22 +50,7 @@ void UpdatePads()
 		userInput[i].pad.substickY = PAD_SubStickY(i);
 		userInput[i].pad.triggerL = PAD_TriggerL(i);
 		userInput[i].pad.triggerR = PAD_TriggerR(i);
-		
-		
-		// WiiU Pro Controller
-		userInput[i].wupcdata.btns_d = WUPC_ButtonsDown(i);
-		userInput[i].wupcdata.btns_u = WUPC_ButtonsUp(i);
-		userInput[i].wupcdata.btns_h = WUPC_ButtonsHeld(i);
-		userInput[i].wupcdata.stickX = WUPC_lStickX(i);
-		userInput[i].wupcdata.stickY = WUPC_lStickY(i);
-		userInput[i].wupcdata.substickX = WUPC_rStickX(i);
-		userInput[i].wupcdata.substickY = WUPC_rStickY(i);
-		// Don't use only held to disconnect, on reconnect the pad sends last held state for a short time.
-		if((WUPC_ButtonsHeld(i) & WUPC_EXTRA_BUTTON_RSTICK && WUPC_ButtonsDown(i) & WUPC_EXTRA_BUTTON_LSTICK) // R3+L3
-		 ||(WUPC_ButtonsHeld(i) & WUPC_EXTRA_BUTTON_LSTICK && WUPC_ButtonsDown(i) & WUPC_EXTRA_BUTTON_RSTICK))
-			WUPC_Disconnect(i);
-		
-		
+
 		if (Settings.rumble == ON) DoRumble(i);
 
 		if(userInput[i].wpad.exp.type == WPAD_EXP_NUNCHUK)
@@ -136,7 +119,6 @@ bool ControlActivityTimeout(void)
  ***************************************************************************/
 void SetupPads()
 {
-	WUPC_Init();
 	PAD_Init();
 	WPAD_Init();
 
@@ -159,7 +141,6 @@ void ShutoffRumble()
 {
 	for (int i = 0; i < 4; i++)
 	{
-		WUPC_Rumble(i, 0);
 		WPAD_Rumble(i, 0);
 		rumbleCount[i] = 0;
 	}
@@ -172,7 +153,6 @@ void DoRumble(int i)
 {
 	if (rumbleRequest[i] && rumbleCount[i] < 3)
 	{
-		WUPC_Rumble(i, 1);
 		WPAD_Rumble(i, 1); // rumble on
 		rumbleCount[i]++;
 	}
@@ -185,7 +165,6 @@ void DoRumble(int i)
 	{
 		if (rumbleCount[i]) rumbleCount[i]--;
 		WPAD_Rumble(i, 0); // rumble off
-		WUPC_Rumble(i, 0);
 	}
 }
 
