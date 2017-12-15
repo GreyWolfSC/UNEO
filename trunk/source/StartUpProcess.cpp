@@ -294,7 +294,6 @@ int StartUpProcess::Execute()
 
 		// Shut down pads
 		WPAD_Shutdown();
-		WUPC_Shutdown();
 
 		// Loading now the cios setup in the settings
 		IosLoader::LoadAppCios();
