@@ -20,7 +20,7 @@
 #include <gctypes.h>
 
 #define NIN_MAGIC					0x01070CF6
-#define NIN_CFG_VERSION				0x00000007
+#define NIN_CFG_VERSION				0x00000008
 
 typedef struct NIN_CFG 
 {

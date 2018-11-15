@@ -5,9 +5,9 @@
 #include <sys/stat.h>
 
 #include "libs/libwbfs/libwbfs.h"
-#include "libs/libfat/fatfile_frag.h"
-#include "libs/libntfs/ntfsfile_frag.h"
-#include "libs/libext2fs/ext2_frag.h"
+#include <fatfile_frag.h>
+#include <ntfsfile_frag.h>
+#include <ext2_frag.h>
 
 #include "usbloader/wbfs.h"
 #include "usbloader/wdvd.h"

@@ -46,7 +46,7 @@ void wiilight(int enable) // Toggle wiilight (thanks Bool for wiilight source)
 u8 shutdown = 0;
 u8 reset = 0;
 
-void __Sys_ResetCallback(void)
+void __Sys_ResetCallback(u32, void*)
 {
 	/* Reboot console */
 	reset = 1;

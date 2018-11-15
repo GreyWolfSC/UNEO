@@ -231,7 +231,7 @@ bool gettextLoadLanguage(const char* langFile)
 	fclose(f);
 	return true;
 }
-const char *gettext(const char *msgid)
+const char *_gettext(const char *msgid)
 {
 	if(!msgid[0]) return NULL;
 	MSG *msg = findMSG(hash_string(msgid));

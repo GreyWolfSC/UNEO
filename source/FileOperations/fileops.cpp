@@ -32,6 +32,7 @@
 #include <string>
 #include <gccore.h>
 #include <sys/dir.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <vector>
